@@ -1,10 +1,10 @@
-from config import TICKERS, CONFIDENCE_LEVEL
-from data_fetcher import fetch_current_price, fetch_stock_data, save_results_to_csv
+from config import TICKERS, CONFIDENCE_LEVEL, APP_NAME
+from data_fetcher import fetch_current_price, save_results_to_csv, fetch_and_save_historical
 from risk_calculator import analyse_stock
 from loguru import logger
 
-logger.info("JSE Risk Collector Starting:")
-print(f"Analysing {len(TICKERS)} stocks at {CONFIDENCE_LEVEL*100}% confidence\n")
+logger.info(f"=== {APP_NAME} Starting ===")
+print(f"\nAnalysing {len(TICKERS)} stocks at {CONFIDENCE_LEVEL*100}% confidence\n")
 
 all_results = []
 
@@ -24,5 +24,9 @@ for ticker in TICKERS:
     print(f"95% VaR:           R{result['var_95']}")
     print("-" * 35)
 
+print("\nFetching historical data...")
+for ticker in TICKERS:
+    fetch_and_save_historical(ticker)
+
 save_results_to_csv(all_results)
-logger.info("JSE Risk Collector Complete")
+logger.info(f"=== {APP_NAME} Complete ===")
